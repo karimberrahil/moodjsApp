@@ -27,7 +27,7 @@
 	        <title>Twitter et Json</title>
 		<link href="common/css/reset.css" rel="stylesheet">
 		<link href="common/css/style.css" rel="stylesheet">
-		
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> 
 	</head>
 
 	<body>
@@ -46,6 +46,7 @@
 			<p class="tweet">
 				<img src="<?php echo $tweet->user->profile_image_url; ?>" alt="user picture" />
 				<span><?php echo $tweet->text; ?></span>
+				<span class="twitter-text" data-tweet-text= '<?php echo $tweet->text; ?>' ></span>
 			</p>
 			
 			<?php
@@ -58,4 +59,9 @@
 			?>
 		</div>
 	</body>
+	<script>
+		console.log($(".twitter-text").data("tweet-text"));
+	</script>
 </html>
+
+
