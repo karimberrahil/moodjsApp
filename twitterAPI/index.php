@@ -1,5 +1,4 @@
 <?php include "library/twitteroauth.php"; ?>
-
 <?php
 	$ConsumerKey = "SSFa2MUj8ePNUanNQS8bihxpW";
 	$ConsumerSecret = "Ft2ORF9ZsfXlrNjTYQt5Y41FvLpvAKcBhAw8p6grhqR0k2MH59";
@@ -9,6 +8,7 @@
 	$twitter = new TwitterOAuth($ConsumerKey, $ConsumerSecret, $AccessToken, $AccessTokenSecret);
 	
 	if(isset($_POST['keywords'])){
+		
 		$keywords = $_POST['keywords'];
 		$nbTweet = $_POST['nbTweet'];
 		
@@ -19,49 +19,134 @@
 		$tweets = $twitter->get("https://api.twitter.com/1.1/search/tweets.json?q=".$keywords."&result_type=recent&count=".$nbTweet);
 	}
 ?>
-
 <!DOCTYPE html>
-<html>
+<html >
 	<head>
-	        <meta charset="utf-8" />
-	        <title>Twitter et Json</title>
-		<link href="common/css/reset.css" rel="stylesheet">
-		<link href="common/css/style.css" rel="stylesheet">
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> 
+	 <title>MoodApp</title>
+	 <meta charset="utf-8" />
+		 <link href="common/css/style.css" rel="stylesheet">
+		 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		 <script src="http://code.jquery.com/jquery-latest.min.js"></script> 
+		 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+		
 	</head>
+	<body >	
+		<div id="widthGlobal">
+			<div id="resultat">
+				<div class="row">
+			   		<div class="col-sm-12">
+						<div class="jumbotron">
+							<div class="title">
+							    <h1>Mood App : An happy search</h1> 
+							    <p>
+							    	You are looking for word which make persons happy ? You are at the right place !
+							    </p> 
+							</div>
+				  		</div>
+				  	</div>
+				 </div>
+			   	<div class="row">
+			   		<div class="col-sm-6">
+			   			<div class="panel panel-default">
+			   				<div class="panel-heading">
+			   					<h3>Searching for hapiness</h3>
+			   				</div>
+		  					<div class="panel-body">
+		    					<form action="" method="post" class="form-horizontal">
+								  <div class="form-group">
+								    <label class="col-sm-2 control-label">Key words* :</label>
+								    <div class="col-sm-6">
+								      <input type="text" class="form-control" name="keywords" placeholder="Bonne humeur" />
+								    </div>
+								  </div>
+								  <div class="form-group">
+								    <label class="col-sm-2 control-label">Tweet number :</label>
+								    <div class="col-sm-6">
+								    	<input type="text" name="nbTweet" class="form-control"  placeholder="10" />
+								    </div>
+								  </div>
+								  <div class="form-group">
+								    <div class="col-sm-offset-4 col-sm-8">
+								      <input class="btn btn-primary" type="submit" name="OK"  />
+								    </div>
+								  </div>
+								</form>
+		  					</div>
+						</div>
+			   		</div>
+			   		<div class="col-sm-6">
+			   			<div class="panel panel-default">
+			   				<div class="panel-heading">
+			   					<h3>Stats</h3>
+			   				</div>
+				   			<div class="progress">
+							  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+							    40% <span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+							  </div>
+							</div>
+							<div class="progress">
+							  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+							    20% <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 
+							  </div>
+							</div>
+							<div class="progress">
+							  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+							    60% <span class=" glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> 
+							  </div>
+							</div>
+							<div class="progress">
+	  							<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+	    						80% <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+	  							</div>
+							</div>	
+						</div>	
+			   		</div>
+			   	</div>
+		   		<div class="row listTweet">
+		   			<div class="list-group">
+					
+					<?php
+						if(isset($_POST['keywords'])):
+							$tab = array();
 
-	<body>
-		<div id="resultat">
-			<form action="" method="post">
-				<label>Mots-clés* : </label><input type="text" name="keywords" /><br />
-				<label>Nombre de tweets : </label><input type="text" name="nbTweet" /><br />
-				<input type="submit" name="OK" />
-			</form>
-			<hr>
-			<?php
-				if(isset($_POST['keywords'])):
-				foreach($tweets->statuses as $tweet):
-			?>
-			
-			<p class="tweet">
-				<img src="<?php echo $tweet->user->profile_image_url; ?>" alt="user picture" />
-				<span><?php echo $tweet->text; ?></span>
-				<span class="twitter-text" data-tweet-text= '<?php echo $tweet->text; ?>' ></span>
-			</p>
-			
-			<?php
-				endforeach;
-				else:
-			?>
-			<p>Veuillez remplir le formulaire</p>
-			<?php
-				endif;
-			?>
+						foreach($tweets->statuses as $tweet):
+							$tab[$tweet->user->name] = $tweet->text;
+
+					?>
+						
+						<li class="list-group-item">
+							<table >
+								<tr>
+									<td >
+										<p class="userName"><?php echo $tweet->user->name; ?></p>
+									</td>
+									<td>
+										<img class="userImage img-thumbnail" src="<?php echo $tweet->user->profile_image_url; ?>" alt="user picture" />
+									</td>
+									<td>
+										<p class="userText">
+											<span class="titleTweet"> Tweet :</span><br><br>
+											<?php echo $tweet->text; ?>
+										</p>
+									</td>	
+								</tr>
+							</table>
+						</li>
+	
+						<?php
+							endforeach;
+							else:
+						?>
+						<div class="col-md-12">
+							Veuillez remplir le formulaire
+						</div>
+						<?php
+							endif;	
+						?>
+					</div>	
+	   			</div>
+			</div>
 		</div>
 	</body>
-	<script>
-		console.log($(".twitter-text").data("tweet-text"));
-	</script>
 </html>
-
 
