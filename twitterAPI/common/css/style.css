@@ -33,29 +33,28 @@ body{
 	float:left;
 	margin: 10px;
 }
-.listTweet {
+.list-group {
 
 	width:100%;
 }
 .userText {
+	
 	font-family:helvetica;
-	margin-left: 250px;
-	width:500px;
+	
 }
 .userName {
 	font-family:helvetica;
 	font-weight: bold;
-	margin-left: 50px;
-	margin-right: 100px;
-	width:100px;
-	text-align: center;
 }
 
-.userImage {
-	width:70px;
-	margin-left: 100px;
+.img {
+	width:90px;
 }
 .titleTweet {
 	font-weight: bold;
 	margin-bottom: 15px;
+}
+.stats {
+	margin-top: 5%;
+	
 }
